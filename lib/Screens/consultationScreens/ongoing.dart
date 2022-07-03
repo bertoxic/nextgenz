@@ -59,7 +59,7 @@ class _OngoingState extends State<Ongoing> {
     return Container(  //width: 400,
       child: SingleChildScrollView(
         child: ListView.builder( physics: NeverScrollableScrollPhysics(), shrinkWrap: true,
-            itemCount:10,itemBuilder: (BuildContext,index){
+            itemCount:10,itemBuilder: (context,index){
               return Container(height: Dimensions.height300/1.7, margin: EdgeInsets.symmetric(vertical: Dimensions.height10,horizontal: Dimensions.width10*0),
                 padding: EdgeInsets.symmetric(vertical: Dimensions.height10/1.2,horizontal: Dimensions.width10),
                 decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(8),
