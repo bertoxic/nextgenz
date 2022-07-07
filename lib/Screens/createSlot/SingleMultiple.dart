@@ -154,12 +154,12 @@ class _SingleMultipleState extends State<SingleMultiple> {
                   shrinkWrap: true,
                   itemCount: Get.find<TaskController>()
                       .taskList
-                      .values
+                      .keys
                       .toList()
                       .length,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext, index) {
-                    return Container(
+                    return Container( width: 400,
                      // height: Dimensions.height45,
                       margin: EdgeInsets.all(Dimensions.width10),
                       padding: EdgeInsets.all(Dimensions.width10),
@@ -172,28 +172,32 @@ class _SingleMultipleState extends State<SingleMultiple> {
                                 offset: Offset(0, 4),
                                 blurRadius: 5)
                           ])),
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.end,
+                      child: Column(
                         children: [
                           Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
                                   child:Column(crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                    for(var item in Get.find<TaskController>().taskList.values.toList()[index])Text("${(index+1).toString()} "+item.title),
+                                    for(var item in Get.find<TaskController>().taskList.values.toList()[index])
+                                      Container(margin: EdgeInsets.symmetric(vertical: Dimensions.width10/5,),
+                                          color:Colors.grey.shade100,
+                                          child: Text("${item.hour.toInt()}:${item.minute.toInt()}",style: TextStyle(color: kDarkGreen),)),
                                   ],),),
                               SizedBox(
                                 width: Dimensions.width15,
                               ),
+
+                              Text(
+                                "${Get.find<TaskController>().taskList.keys.toList()[index]} ",style: TextStyle(fontSize: 12,color:Colors.grey),),
                               Icon(
                                 Icons.notifications,
                                 color: Colors.pink,
                                 size: 20,
                               ),
-
                             ],
                           ),
-                          Text(
-                              "${Get.find<TaskController>().taskList.keys.toList()[index]} ",style: TextStyle(fontSize: 12,color:Colors.grey),),
+
                         ],
                       ),
                     );

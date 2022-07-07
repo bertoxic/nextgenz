@@ -4,6 +4,8 @@ import 'package:flutter_holo_date_picker/date_time_formatter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:untitled2/Screens/createSlot/SingleMultiple.dart';
+import 'package:untitled2/Screens/createSlot/createSlot.dart';
 import 'package:untitled2/model/events.dart';
 import 'package:untitled2/Screens/writepresciption/findings.dart';
 import 'package:untitled2/controller/TaskController.dart';
@@ -18,10 +20,11 @@ class CalenderScreen extends StatefulWidget {
 }
 
 class _CalenderScreenState extends State<CalenderScreen> {
-  late Map<DateTime,List<Events>> selectedEvents;
+  late Map<DateTime,List<TimeOfDay>> selectedEvents;
   CalendarFormat _format=CalendarFormat.month;
   DateTime selectedDay=DateTime.now();
   DateTime focusedDay= DateTime.now();
+  TimeOfDay? newtime;
   TextEditingController _eventController =TextEditingController();
   TimeOfDay time= TimeOfDay(hour: 10, minute: 30);
   @override
@@ -35,7 +38,7 @@ super.initState();
 _eventController.dispose();
 super.dispose();
   }
-  List<Events> getEventsfromDay(DateTime date){
+  List<TimeOfDay> getEventsfromDay(DateTime date){
     return Get.find<TaskController>().taskList[date]??[];
   }
   @override
@@ -61,7 +64,7 @@ super.dispose();
                        setState(() {
                          selectedDay=selectDay;
                          focusedDay=focusDay;
-                       //  print("$selectDay" +"   $focusedDay");
+                         print("$selectDay" +"   $focusedDay");
                        });
                     },
                     calendarStyle: CalendarStyle(
@@ -76,51 +79,66 @@ super.dispose();
                 ),
            // ..._getEventsfromDay(selectedDay).map((Events events) => ListView(children: [Text("${events.title}")],shrinkWrap: true,)),
             SizedBox(height: Dimensions.height15,),
-            KeyButton('Add Task',width:Dimensions.width20*10,onTap: (){
-              //showTimePicker(context: context, initialTime: time,);
+            KeyButton('Pick Time',width:Dimensions.width20*10,onTap: () async{
+               newtime= await showTimePicker(context: context,
+                initialTime: time,
+                initialEntryMode:TimePickerEntryMode.dial,
+              );
+               if(newtime==null){ return;} else
+                if(taskme[selectedDay] !=null){
+                  print('hello000 ${taskme[selectedDay]!.length} ${newtime.toString()}');
+                  Get.find<TaskController>().AddMoreEvents(selectedDay, newtime!);
+                  print("${Get.find<TaskController>().lizt.length}");
+                }else{
+                  print('jonee ${selectedEvents.values}');
+                   Get.find<TaskController>().makeEvent(selectedDay, newtime!);
+                  print("${Get.find<TaskController>().lizt.length}");
+                }
 
-
-              showDialog(context: context, builder: (context)=>AlertDialog(
-                contentPadding: EdgeInsets.fromLTRB(Dimensions.width10*2.4, Dimensions.width10*2, Dimensions.width10*2.4, Dimensions.width10*2.4),
-                title: const Text('Add  consultation',), titleTextStyle: const TextStyle(color: Colors.grey),
-                content: Container( height: Dimensions.height100, width: Dimensions.height200, //color: Colors.lightGreen,
-                  child: Column(children: [
-                    TextFormField(controller: _eventController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(borderSide: BorderSide(color: Colors.red,width: Dimensions.width10*0.8)),
-                      hintText: "Add your new task",
-                    ),)
-                  ],),
-                ),
-                actions: [
-                  TextButton(onPressed: (){
-                    if(_eventController.text.isEmpty){
-                      print('${DateTime.now()}, ${Get.find<TaskController>().lizt.length}'); Get.find<TaskController>().lizt.length;
-
-                      return;}
-                    else {
-                      if (taskme[selectedDay] != null) {
-                        print('hello000');
-                       // selectedEvents[selectedDay]!.add(Events(title: _eventController.text));
-                        Get.find<TaskController>().getEventsfromDay(selectedDay, _eventController.text);
-                        //taskme[selectedDay]!.add(Events(title: _eventController.text));
-                      } else {
-                        selectedEvents[selectedDay] = [Events(title: _eventController.text)];
-                        //taskme[selectedDay]= [Events(title: _eventController.text)];
-                        Get.find<TaskController>().makeEvent(selectedDay, _eventController.text);
-                       // Get.find<TaskController>().getEventsfromDay(selectedDay, _eventController.text);
-                      }
-                      Navigator.pop(context);
-
-                      setState(() {});
-                      _eventController.clear();
-                    };},
-                    child: Text('Add time'),),
-                  SizedBox(width: Dimensions.height10,),
-                  TextButton(onPressed: (){Navigator.pop(context);
-                    _eventController.clear();}, child: Text('Cancel'),)
-                ],
-              ));
+              // showDialog(context: context, builder: (context)=>AlertDialog(
+              //   contentPadding: EdgeInsets.fromLTRB(Dimensions.width10*2.4, Dimensions.width10*2, Dimensions.width10*2.4, Dimensions.width10*2.4),
+              //   title: const Text('Add  consultation',), titleTextStyle: const TextStyle(color: Colors.grey),
+              //   content: Container( height: Dimensions.height100, width: Dimensions.height200, //color: Colors.lightGreen,
+              //     child: Column(children: [
+              //       TextFormField(controller: _eventController,
+              //       decoration: InputDecoration(
+              //         border: OutlineInputBorder(borderSide: BorderSide(color: Colors.red,width: Dimensions.width10*0.8)),
+              //         hintText: "Add your new task",
+              //       ),)
+              //     ],),
+              //   ),
+              //   actions: [
+              //     TextButton(onPressed: (){
+              //       if(_eventController.text.isEmpty){
+              //         print('${DateTime.now()}, ${Get.find<TaskController>().lizt.length}'); Get.find<TaskController>().lizt.length;
+              //
+              //         return;}
+              //       else {
+              //         if (taskme[selectedDay] != null) {
+              //           print('hello000');
+              //          // selectedEvents[selectedDay]!.add(Events(title: _eventController.text));
+              //           Get.find<TaskController>().getEventsfromDay(selectedDay, _eventController.text);
+              //           //taskme[selectedDay]!.add(Events(title: _eventController.text));
+              //         } else {
+              //           selectedEvents[selectedDay] = [Events(title: _eventController.text)];
+              //           //taskme[selectedDay]= [Events(title: _eventController.text)];
+              //           Get.find<TaskController>().makeEvent(selectedDay, _eventController.text);
+              //          // Get.find<TaskController>().getEventsfromDay(selectedDay, _eventController.text);
+              //         }
+              //         Navigator.pop(context);
+              //
+              //         setState(() {});
+              //         _eventController.clear();
+              //       };},
+              //       child: Text('Add time'),),
+              //     SizedBox(width: Dimensions.height10,),
+              //     TextButton(onPressed: (){Navigator.pop(context);
+              //       _eventController.clear();}, child: Text('Cancel'),)
+              //   ],
+              // ));
+              Navigator.pop(context);
+               Navigator.pop(context);
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=>CreateSlot()));
             },)
           ],
         ),

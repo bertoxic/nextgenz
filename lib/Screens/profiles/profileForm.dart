@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 //import 'package:nextgen/screens/helpers/sharedpreference.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:untitled2/Screens/consultationScreens/ongoing.dart';
+import 'package:untitled2/helper/sharedprefrence.dart';
 //import 'package:nextgen/services/api.dart';
 import 'package:untitled2/utils/Dimensions.dart';
 import 'package:untitled2/utils/appColor.dart';
@@ -305,15 +306,16 @@ class _FormsState extends State<Forms> {
         // 'emailId': _emailIdController.text,
         'mobileNumber': widget.phoneNumber,
         'dateOfBirth': _selectedDate.toString(),
-        'address': {'address': state, 'city': _city.text},
-        'email':_email.text,
+        'address': {'state': state, 'city': _city.text},
+        'emailId':_email.text,
         'Specialty':_specialty.text,
-        'consultationFee':_amt.text,
+        'consultationFees':_amt.text,
         'registrationCouncil':_regCouncil.text,
-        'hospitalName':_hospital.text,
+        'hospital':_hospital.text,
         'hospitalAddress':_hospitalAddress.text
       } ;
        print('donnnxxxxxxxxxvvvvee');
+       SharedPreference().save('username', _name.text,);
     //   widget.onNext;
     //   //Navigator.push(context, MaterialPageRoute(builder: (context)=>Ongoing()));
     //

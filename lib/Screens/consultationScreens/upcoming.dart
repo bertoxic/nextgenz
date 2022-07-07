@@ -3,14 +3,39 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled2/Screens/consultationScreens/patientdetails.dart';
+import 'package:untitled2/model/patientModel.dart';
 import 'package:untitled2/utils/Dimensions.dart';
 import 'package:untitled2/utils/appColor.dart';
 import 'package:untitled2/widgets/midTxt.dart';
 import 'package:untitled2/widgets/nextgenbutton.dart';
 
-class Upcoming extends StatelessWidget {
+import '../../Services/api.dart';
+import '../../Services/url.dart';
+
+class Upcoming extends StatefulWidget {
   const Upcoming({Key? key}) : super(key: key);
 
+  @override
+  State<Upcoming> createState() => _UpcomingState();
+}
+
+class _UpcomingState extends State<Upcoming> {
+  late final Services _services = Services();
+  List<PatientModel> listProfile=[];
+  PatientModel? _patientModel;
+  getConsultations(){
+    String id = '613f68a56313f81969ea0dd2';
+    _services.getRequest('${URL.consultation}$id,upcoming').then((value){
+      _patientModel=PatientModel.fromJson(value);
+      List<PatientData>? data =_patientModel!.data;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(  //width: 400,

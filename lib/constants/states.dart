@@ -36,3 +36,19 @@ var states = [
   "Lakshadweep",
   "Puducherry"
 ];
+var dosingFrequency=[
+  "q.d",
+  "bid",
+  "qid",
+  "tid",
+];
+
+var drugForm=[
+  "Tab",
+  'capsule'
+  "Black",
+  "injection",
+  "suppository",
+  'syrup',
+  'powder'
+];

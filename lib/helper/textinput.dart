@@ -100,7 +100,7 @@ class TextBox extends StatelessWidget {
       ),
         Container( height: Dimensions.height400/1.8,
           decoration: BoxDecoration(border: Border.all(color: kVeryDarkGreen),borderRadius: BorderRadius.circular(10).copyWith(topLeft: Radius.circular(0),topRight:  Radius.circular(0),)),
-          child: TextFormField(
+          child: TextFormField( controller: textEditingController,
             maxLines: null,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration( hintText: "Note Any Typical Instruction for this",
