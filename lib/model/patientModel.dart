@@ -15,7 +15,6 @@ class PatientModel {
   }
 }
 
-
 class PatientData {
   String? name;
   String? Gender;

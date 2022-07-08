@@ -65,7 +65,7 @@ class _UpcomingState extends State<Upcoming> {
             Flexible(
               child: Column( crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                MidTxt('Anya kumana',size: Dimensions.width10*1.4,),
+                MidTxt('Anya kumanah',size: Dimensions.width10*1.4,),
                   SizedBox(height: Dimensions.height10/2,),
                 Text('Gender: Female',style:TextStyle(fontSize: Dimensions.width10*1.4) ),
                   SizedBox(height: Dimensions.height10/2,),
