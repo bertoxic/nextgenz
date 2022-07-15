@@ -9,9 +9,39 @@ import 'package:untitled2/utils/Dimensions.dart';
 import 'package:untitled2/utils/appColor.dart';
 import 'package:untitled2/widgets/nextgenbutton.dart';
 
-class CompletedConsults extends StatelessWidget {
+import '../../Services/api.dart';
+import '../../Services/url.dart';
+import '../../model/consultation_model.dart';
+
+class CompletedConsults extends StatefulWidget {
   const CompletedConsults({Key? key}) : super(key: key);
 
+  @override
+  State<CompletedConsults> createState() => _CompletedConsultsState();
+}
+late final Services _services=Services();
+int? dataLength;
+List<ConsultationData>? data;
+ConsultationModel _consultationModel=ConsultationModel();
+class _CompletedConsultsState extends State<CompletedConsults> {
+  getConsultation() async{
+    String id = '613f68a56313f81969ea0dd2';
+    // _pagingController.addPageRequestListener((pageKey) {
+    await _services.getRequest('${URL.consultation}$id,completed').then((value) {
+      setState(() {
+        _consultationModel = ConsultationModel.fromJson(value);
+        dataLength = _consultationModel.data!.length;
+        data = _consultationModel.data;
+      });
+    });
+    //}
+  }
+  @override
+  void initState() {
+    //getConsultation();
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(  //width: 400,

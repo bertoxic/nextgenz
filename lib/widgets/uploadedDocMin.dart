@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:untitled2/utils/Dimensions.dart';
 import 'package:untitled2/widgets/midTxt.dart';
 
 class MiniDocs extends StatelessWidget {
-  const MiniDocs({Key? key}) : super(key: key);
+  String? date;
+   MiniDocs({this.date,Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class MiniDocs extends StatelessWidget {
                 child: Column( mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     MidTxt('Date'),
-                    Text('4/07/2022'),
+                    Text(DateFormat.yMMMd().format(DateTime.parse(date??'2022-07-15T00:00:00.000Z'))),
                   ],
                 ),),
             ),

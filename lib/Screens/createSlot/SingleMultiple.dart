@@ -4,11 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:untitled2/Screens/createSlot/calenderScreen.dart';
 import 'package:untitled2/model/events.dart';
 import 'package:untitled2/controller/TaskController.dart';
 import 'package:untitled2/utils/Dimensions.dart';
 import 'package:untitled2/utils/appColor.dart';
+
+import 'calenderX.dart';
 
 class SingleMultiple extends StatefulWidget {
   SingleMultiple({Key? key}) : super(key: key);
@@ -18,6 +21,8 @@ class SingleMultiple extends StatefulWidget {
 }
 TimeOfDay time= TimeOfDay(hour: 10, minute: 30);
 class _SingleMultipleState extends State<SingleMultiple> {
+  String? from="From";
+  String? to="To";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,17 +43,17 @@ class _SingleMultipleState extends State<SingleMultiple> {
                               content: Container(
                                   width: Dimensions.height400,
                                   height: Dimensions.height400 / 1.1,
-                                  child: CalenderScreen()),
+                                  child: CalenderX()),
                               actions: [
-                                SizedBox(
-                                  width: Dimensions.height10,
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('Cancel'),
-                                )
+                                // SizedBox(
+                                //   width: Dimensions.height10,
+                                // ),
+                                // TextButton(
+                                //   onPressed: () {
+                                //     Navigator.pop(context);
+                                //   },
+                                //   child: Text('Cancel'),
+                                // )
                               ],
                             ));
                   },
@@ -94,8 +99,11 @@ class _SingleMultipleState extends State<SingleMultiple> {
                 Row(
                   children: [
                     Expanded(
-                      child: GestureDetector( onTap: (){
-                        showTimePicker(context: context, initialTime: time);
+                      child: GestureDetector( onTap: () async{
+                        var frompicked= await showTimePicker(context: context, initialTime: time);
+                        setState(() {
+                          from =frompicked?.format(context);
+                        });
                       },
                         child: Container(
                           margin: EdgeInsets.only(top: Dimensions.height30),
@@ -108,7 +116,7 @@ class _SingleMultipleState extends State<SingleMultiple> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('From'),
+                              Text(from??'From'),
                               Icon(
                                 Icons.keyboard_arrow_down,
                                 color: kPrimary,
@@ -122,23 +130,31 @@ class _SingleMultipleState extends State<SingleMultiple> {
                       width: Dimensions.width20,
                     ),
                     Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(top: Dimensions.height30),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.width20,
-                            vertical: Dimensions.height10),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: kPrimary),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('To'),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: kPrimary,
-                            )
-                          ],
+                      child: GestureDetector( onTap: ()async{
+                       var Topicked= await showTimePicker(context: context, initialTime: time);
+                        setState(() {
+                          to =Topicked?.format(context);
+                          var bin = DateFormat(to);
+                        });
+                      },
+                        child: Container(
+                          margin: EdgeInsets.only(top: Dimensions.height30),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width20,
+                              vertical: Dimensions.height10),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: kPrimary),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(to??'To'),
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                color: kPrimary,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),

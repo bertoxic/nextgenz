@@ -303,7 +303,6 @@ class _FormsState extends State<Forms> {
         'id': widget.id,
         'name': _name.text,
         'gender': _gender,
-        // 'emailId': _emailIdController.text,
         'mobileNumber': widget.phoneNumber,
         'dateOfBirth': _selectedDate.toString(),
         'address': {'state': state, 'city': _city.text},

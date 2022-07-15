@@ -11,7 +11,13 @@ import 'package:untitled2/widgets/uploadedDocMin.dart';
 import '../../utils/appColor.dart';
 
 class PatientProfile extends StatefulWidget {
-  const PatientProfile({Key? key}) : super(key: key);
+  String? patientName;
+  String? patientAge;
+  String? patientGender;
+  String? patientComplaint;
+  String? patientCity;
+  String? patientDate;
+   PatientProfile({this.patientName,this.patientDate,this.patientComplaint,this.patientCity,this.patientGender,Key? key}) : super(key: key);
 
   @override
   State<PatientProfile> createState() => _PatientProfileState();
@@ -42,7 +48,7 @@ class _PatientProfileState extends State<PatientProfile> {
                               Column( crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                 Text('Name ',style: TextStyle(fontSize:Dimensions.height10*1.6,),),
-                                MidTxt('Kelvin kurli ',size: Dimensions.height10*1.6,),
+                                MidTxt( widget.patientName??'nil',size: Dimensions.height10*1.6,),
                                 SizedBox(width: Dimensions.height300/1.5,child: Divider(color: Colors.grey,thickness: 1,),),
                                 Flexible(
                                   child: Row(
@@ -52,7 +58,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                           children: [
                                             Text('Age ',style: TextStyle(fontSize:Dimensions.height10*1.6,),),
                                             SizedBox(height: Dimensions.height10,),
-                                            MidTxt('26 ',size: Dimensions.height10*1.6,),
+                                            MidTxt(widget.patientAge??'null',size: Dimensions.height10*1.6,),
                                           ],
                                         ),
                                       ),
@@ -61,7 +67,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                           children: [
                                             Text('Gender ',style: TextStyle(fontSize:Dimensions.height10*1.6,),),
                                             SizedBox(height: Dimensions.height10,),
-                                            MidTxt('Female ',size: Dimensions.height10*1.4,),
+                                            MidTxt( widget.patientGender??'null',size: Dimensions.height10*1.4,),
                                           ],
                                         ),
                                       ),
@@ -70,7 +76,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                           children: [
                                             Text('State ',style: TextStyle(fontSize:Dimensions.height10*1.6,),),
                                             SizedBox(height: Dimensions.height10,),
-                                            Text(' '),
+                                            Text(widget.patientCity??'null'),
                                           ],
                                         ),
                                       ),
@@ -125,8 +131,7 @@ class _PatientProfileState extends State<PatientProfile> {
                   Container( padding: EdgeInsets.all(8), height: Dimensions.height100, width: double.infinity,
                     decoration: BoxDecoration( borderRadius:BorderRadius.circular(8),
                         border: Border.all(width: Dimensions.width10/5,color: Colors.grey.shade300)),
-                    child: SingleChildScrollView(child: Container(child:  Text('Here contains the patient complaints'
-                        'sight headache and a high fever, sometimes loss of appetite. '))),)
+                    child: SingleChildScrollView(child: Container(child:  Text('${widget.patientComplaint} '))),)
 
                 ],),
             ),
@@ -143,9 +148,9 @@ class _PatientProfileState extends State<PatientProfile> {
               Container( height: Dimensions.height100*1.9,
                   child: SingleChildScrollView( scrollDirection: Axis.horizontal,
                     child: Row(children: [
-                      MiniDocs(),
-                      MiniDocs(),
-                      MiniDocs(),
+                      MiniDocs(date: widget.patientDate,),
+                      MiniDocs(date: widget.patientDate),
+                      MiniDocs(date: widget.patientDate),
                     ],),
                   )
               ),

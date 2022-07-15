@@ -157,7 +157,7 @@ class _DocumentsUploadState extends State<DocumentsUpload> {
 
               //uploadPicture(regCert);
               // uploadPicture(basicCert);
-               Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
+               Navigator.push(context, MaterialPageRoute(builder: (context)=> const HomeScreen()));
               // uploadPicture(result);
              }
              )

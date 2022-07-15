@@ -5,9 +5,41 @@ import 'package:untitled2/Screens/navigationBar/navbar.dart';
 import 'package:untitled2/utils/Dimensions.dart';
 import 'package:untitled2/utils/appColor.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+import '../../Services/api.dart';
+import '../../Services/url.dart';
+import '../../model/consultation_model.dart';
 
+class HomeScreen extends StatefulWidget {
+   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+
+}
+late final Services _services = Services();
+List<ConsultationData> listProfile=[];
+Doctor? _patientModel;
+bool isLoaded=false;
+
+//http://stgapi.nextgendoctors.in/user/613f68a56313f81969ea0dd2
+class _HomeScreenState extends State<HomeScreen> {
+  getConsultations()async{
+    String id = '6244cf1e0d7a447c25f18c52';
+    await _services.getRequest('${URL.doctorList}$id').then((value){
+      var rem = value[0];
+      _patientModel=Doctor.fromJson(rem);
+      // List<ConsultationData>? data =_patientModel!.data;
+      // listProfile.addAll( _patientModel!.data!);
+      if(listProfile.isNotEmpty){setState(() {
+        isLoaded=true;
+      });};
+    });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +63,8 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Anya Kimimotoyi',
+                      'Kimaya Hushira',
+                    //  _patientModel!.mobileNumber.toString(),
                       style: TextStyle(
                           fontSize: Dimensions.width10 * 1.8,
                           fontWeight: FontWeight.bold,
