@@ -36,13 +36,8 @@ TextEditingController nameOfMedicine =TextEditingController();
 
 
 class _MedicineTabState extends State<MedicineTab> {
-  @override
-  void dispose() {
-    textAreaz.dispose();
-    nameOfMedicine.dispose();
-    super.dispose();
 
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold( backgroundColor: Colors.grey.shade300, resizeToAvoidBottomInset: false,
