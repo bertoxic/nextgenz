@@ -51,11 +51,11 @@ class _MonthlyState extends State<Monthly> {
                       textColor: Colors.grey.shade200,
                       backgroundColor: kDarkGreen,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(1960),
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2052),
                       dateFormat: "dd-MMMM-yyyy",
                       locale: DateTimePickerLocale.en_us,
-                      looping: true,
+                      looping: false,
 
                     );setState(() {
                       fromD=date;
@@ -68,7 +68,7 @@ class _MonthlyState extends State<Monthly> {
                       child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           fromD == null?Text("From"):
-                          Text("${DateFormat.yMMMd().format(fromD!)}"),
+                          Text(DateFormat.yMMMd().format(fromD!)),
                           Icon(Icons.keyboard_arrow_down,color: kPrimary,)
                         ],
                       ),),
@@ -85,7 +85,7 @@ class _MonthlyState extends State<Monthly> {
                       lastDate: DateTime(2052),
                       dateFormat: "dd-MMMM-yyyy",
                       locale: DateTimePickerLocale.en_us,
-                      looping: true,
+                      looping: false,
 
                     );setState(() {
                       toD=date;
@@ -212,13 +212,7 @@ class _MonthlyState extends State<Monthly> {
                   ),
                 ),
               ],),
-              KeyButton('Save',onTap: (){
-             setState(() {
-              Get.find<TaskController>().getDaysBtw(fromD!, toD!);
-               Get.find<TaskController>().daysnym(_daysSelected);
-               Get.find<TaskController>().getDays();
-             });
-              },)
+
             ],
           ),),
           GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisExtent: 50),
@@ -238,8 +232,21 @@ class _MonthlyState extends State<Monthly> {
                    });
 
                  }) ;
-               })
-
+               }),
+          SizedBox(height: Dimensions.height45,),
+          Row(
+            children: [
+              Expanded(
+                child: KeyButton('Save',txtSize:Dimensions.height20,onTap: (){
+                  setState(() {
+                    Get.find<TaskController>().getDaysBtw(fromD!, toD!);
+                    Get.find<TaskController>().daysnym(_daysSelected);
+                    Get.find<TaskController>().getDays();
+                  });
+                },),
+              ),
+            ],
+          )
         ],
       ),
     );

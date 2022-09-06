@@ -43,12 +43,13 @@ var dosingFrequency=[
   "tid",
 ];
 
-var drugForm=[
-  "Tab",
-  'capsule'
-  "Black",
+const List<String> drugForm=[
+  "Tablet",
+  'capsule',
+  "Bolus",
   "injection",
   "suppository",
   'syrup',
-  'powder'
+  'powder',
+  "other",
 ];

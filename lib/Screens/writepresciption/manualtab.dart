@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:untitled2/Screens/home/homescreen.dart';
 import 'package:untitled2/Screens/navigationBar/navbar.dart';
 import 'package:untitled2/helper/textinput.dart';
 import 'package:untitled2/utils/Dimensions.dart';
 import 'package:untitled2/utils/appColor.dart';
 import 'package:untitled2/widgets/BigTxt.dart';
+import '../../controller/prescription_controller.dart';
+import '../../model/prescriptionsModel.dart';
+import '../../widgets/keyButton.dart';
 
 class ManualTab extends StatefulWidget {
   const ManualTab({Key? key}) : super(key: key);
@@ -12,18 +16,18 @@ class ManualTab extends StatefulWidget {
   @override
   State<ManualTab> createState() => _ManualTabState();
 }
-enum test {lab , medicine, manual,finding,none}
-var picked =test.none;
-List<Map<String,dynamic>> _medcinList=[];
+List<PrescriptionModel> prescriptionList=[];
 TextEditingController textArea =TextEditingController();
 TextEditingController nameOfMedicine =TextEditingController();
 class _ManualTabState extends State<ManualTab> {
   @override
   Widget build(BuildContext context) {
+    return GetBuilder<PrescriptionController>(
+  builder: (logic) {
     return Scaffold( backgroundColor: Colors.grey.shade300, resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.all(Dimensions.height20).copyWith(top: Dimensions.height100,left:Dimensions.height10,right: Dimensions.height10 ),
+          margin: EdgeInsets.all(Dimensions.height20).copyWith(top: Dimensions.height45,left:Dimensions.height10,right: Dimensions.height10 ),
           padding: EdgeInsets.all(Dimensions.height20),
           color: Colors.grey.shade100,
           child: Column( crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,12 +38,12 @@ class _ManualTabState extends State<ManualTab> {
                 child: Column(
                   children: [
                     Container( //height:300,
-                      child: ListView.builder( itemCount:  _medcinList.length,shrinkWrap: true, physics: const NeverScrollableScrollPhysics(),
+                      child: ListView.builder( itemCount: logic.manualMedList.length,shrinkWrap: true, physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context,index){
                             return Container( width: double.infinity,
                               child: Column(
                                 children: [
-                                  _medcinList==[]?Container()://Container(),
+                                  logic.manualMedList==[]?Container()://Container(),
                                   Container( width:double.infinity,
                                     margin:EdgeInsets.symmetric(vertical: Dimensions.height10/5,horizontal:Dimensions.width10, ),
                                     padding:EdgeInsets.symmetric(vertical: Dimensions.height10/2,horizontal:Dimensions.width10, ),
@@ -49,14 +53,13 @@ class _ManualTabState extends State<ManualTab> {
                                     )),
                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Flexible(child: Container(child: Text("${_medcinList[index]['description']}"))),
+                                        Flexible(child: Container(child: Text("${logic.manualMedList[index].medicine}"))),
                                         Container(child: Row(children: [
                                           GestureDetector(onTap:(){
                                             setState(() {
-                                              nameOfMedicine.text=_medcinList[index]['medicine'];
-                                              textArea.text=_medcinList[index]['description'];
-                                              print('clicked $index');
-                                              _medcinList.removeAt(index);
+                                              nameOfMedicine.text=logic.manualMedList[index].medicine??"null";
+                                              textArea.text=logic.manualMedList[index].othersDescription??'';
+                                              logic.manualMedList.removeAt(index);
 
                                             });
                                           },
@@ -76,9 +79,9 @@ class _ManualTabState extends State<ManualTab> {
 
                                               ),
                                               child: GestureDetector( onTap:(){
-                                               setState(() {
-                                                 _medcinList.removeAt(index);
-                                               });
+                                              // setState(() {
+                                                logic.removeToManual(index);
+                                             //  });
                                               },
                                                   child: Icon(Icons.clear,color: kPrimary,size: Dimensions.width30/1.5,))),
 
@@ -120,7 +123,7 @@ class _ManualTabState extends State<ManualTab> {
                   Expanded(child: KeyButton('Cancel',txtSize: Dimensions.height10*1.6,)),
                   Expanded(child: KeyButton('Add',onTap: (){
                     setState(() {
-                      _medcinList.add({'medicine':nameOfMedicine.text,'description':textArea.text,});
+                      logic.addToManual(PrescriptionModel(medicine:  nameOfMedicine.text,othersDescription: textArea.text));
                       textArea.clear();
                       nameOfMedicine.clear();
 
@@ -129,17 +132,19 @@ class _ManualTabState extends State<ManualTab> {
                     // prescriptionRow["MedicineDescription"] =textArea.text;
 
                   },)),
-                  Expanded(child: KeyButton('Next',onTap: ()=>_savePresciption(context),)),
+                  Expanded(child: KeyButton('Next',onTap: ()=>_savePrescription(context),)),
                 ],
               ),
             ],),
         ),
       ),
-      bottomNavigationBar: NavBar(),
+      bottomNavigationBar: const NavBar(),
     );
+  },
+);
   }
 }
-_savePresciption(BuildContext context)  async {
+_savePrescription(BuildContext context)  async {
   //EasyLoading.show(status: 'Loading', dismissOnTap: true);
   var data = {
     'id': '',
@@ -156,24 +161,3 @@ _savePresciption(BuildContext context)  async {
   Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
 }
 
-class KeyButton extends StatelessWidget {
-  KeyButton(this.txt,{this.width=80,this.onTap,this.txtSize=14,
-    Key? key,
-  }) : super(key: key);
-  String txt='';
-  Function()? onTap;
-  double? width;
-  double? txtSize;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector( onTap: onTap,
-      child: Container( width: width, margin: EdgeInsets.symmetric(horizontal: Dimensions.width10),
-        padding: EdgeInsets.symmetric(vertical: Dimensions.height10,horizontal:  Dimensions.width10/2),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),
-          color: kPrimary,
-          //border: Border.all(color: kLightGreen,width: 2)
-        ),
-        child: Center(child: Text(txt,style: TextStyle(color:klighterGreen,fontSize: txtSize),)),),
-    );
-  }
-}

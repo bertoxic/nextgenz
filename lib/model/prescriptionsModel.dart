@@ -1,14 +1,15 @@
 
 class PrescriptionModel{
-  PrescriptionModel({required this.medicine,this.othersDescription="no description"});
-  String medicine;
+  PrescriptionModel({ this.medicine,this.othersDescription="no description",this.dose,this.medicineType});
+  String? medicine;
   String? othersDescription;
   String? dose;
   String? duration;
-  @override
-  String toString(){
-    return medicine;
-  }
+  String? medicineType;
+  // @override
+  // String toString(){
+  //   return medicine;
+  // }
 
   Map<String, String?> toJson() {
     return {
@@ -16,7 +17,18 @@ class PrescriptionModel{
       "othersDescription": othersDescription,
       "dose": dose,
       "duration": duration,
+      "medicineType":medicineType,
     };
+  }
+
+  PrescriptionModel.fromJson(Map<String, dynamic> json){
+    medicine=json["medicine"];
+  }
+
+  PrescriptionModel fromxJson(Map<String, dynamic> json){
+   return PrescriptionModel(
+     medicine: json['medicine']
+   );
   }
 }
 

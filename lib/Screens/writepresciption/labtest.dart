@@ -1,10 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:untitled2/Screens/home/homescreen.dart';
 import 'package:untitled2/Screens/navigationBar/navbar.dart';
+import 'package:untitled2/controller/prescription_controller.dart';
 import 'package:untitled2/helper/textinput.dart';
+import 'package:untitled2/model/labmodel.dart';
 import 'package:untitled2/utils/Dimensions.dart';
 import 'package:untitled2/utils/appColor.dart';
 import 'package:untitled2/widgets/BigTxt.dart';
+
+import '../../widgets/keyButton.dart';
 
 class LabTest extends StatefulWidget {
   const LabTest({Key? key}) : super(key: key);
@@ -20,6 +27,8 @@ TextEditingController nameOfTest =TextEditingController();
 class _LabTestState extends State<LabTest> {
   @override
   Widget build(BuildContext context) {
+    return GetBuilder<PrescriptionController>(
+  builder: (logic) {
     return Scaffold( backgroundColor: Colors.grey.shade300, resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Container(
@@ -34,12 +43,12 @@ class _LabTestState extends State<LabTest> {
                 child: Column(
                   children: [
                     Container( //height:300,
-                      child: ListView.builder( itemCount:  _testList.length,shrinkWrap: true, physics: const NeverScrollableScrollPhysics(),
+                      child: ListView.builder( itemCount:  logic.labTestList.length,shrinkWrap: true, physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context,index){
                             return Container( width: double.infinity,
                               child: Column(
                                 children: [
-                                  _testList==[]?Container()://Container(),
+                                  logic.labTestList==[]?Container()://Container(),
                                   Container( width:double.infinity,
                                     margin:EdgeInsets.symmetric(vertical: Dimensions.height10/5,horizontal:Dimensions.width10, ),
                                     padding:EdgeInsets.symmetric(vertical: Dimensions.height10/2,horizontal:Dimensions.width10, ),
@@ -49,14 +58,13 @@ class _LabTestState extends State<LabTest> {
                                     )),
                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Flexible(child: Container(child: Text("${_testList[index]['medicine']}"))),
+                                        Flexible(child: Container(child: Text("${logic.labTestList[index].name}"))),
                                         Container(child: Row(children: [
                                           GestureDetector(onTap:(){
                                             setState(() {
-                                              nameOfTest.text=_testList[index]['medicine'];
-                                              textArea.text=_testList[index]['description'];
-                                              print('clicked $index');
-                                              _testList.removeAt(index);
+                                              nameOfTest.text=logic.labTestList[index].name!;
+                                              textArea.text=logic.labTestList[index].description??"";
+                                              logic.labTestList.removeAt(index);
 
                                             });
                                           },
@@ -76,9 +84,7 @@ class _LabTestState extends State<LabTest> {
 
                                               ),
                                               child: GestureDetector(onTap:(){
-                                                setState(() {
-                                                  _testList.removeAt(index);
-                                                });
+                                                  logic.removeToLab(index);
                                               },
                                                   child: Icon(Icons.clear,color: kPrimary,size: Dimensions.width30/1.5,))),
 
@@ -121,7 +127,8 @@ class _LabTestState extends State<LabTest> {
                   Expanded(child: KeyButton('Cancel')),
                   Expanded(child: KeyButton('Save',onTap: (){
                     setState(() {
-                      _testList.add({'medicine':nameOfTest.text,'description':textArea.text,});
+                      logic.addToLab(LabModel(name: nameOfTest.text,description: textArea.text));
+                     // logic.labTestList.add({'medicine':nameOfTest.text,'description':textArea.text,});
                       textArea.clear();
                       nameOfTest.clear();
 
@@ -130,17 +137,19 @@ class _LabTestState extends State<LabTest> {
                     // prescriptionRow["MedicineDescription"] =textArea.text;
 
                   },)),
-                  Expanded(child: KeyButton('Add more',onTap: ()=>_savePresciption(context),)),
+                  Expanded(child: KeyButton('Add more',onTap: ()=>_savePrescription(context),)),
                 ],
               ),
             ],),
         ),
       ),
-      bottomNavigationBar: NavBar(),
+      bottomNavigationBar: const NavBar(),
     );
+  },
+);
   }
 }
-_savePresciption(BuildContext context)  async {
+_savePrescription(BuildContext context)  async {
   //EasyLoading.show(status: 'Loading', dismissOnTap: true);
   var data = {
     'id': '',
@@ -157,25 +166,4 @@ _savePresciption(BuildContext context)  async {
   Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
 }
 
-class KeyButton extends StatelessWidget {
-  KeyButton(this.txt,{this.width=80,this.onTap,this.txtSize=14,
-    Key? key,
-  }) : super(key: key);
-  String txt='';
-  Function()? onTap;
-  double? width;
-  double? txtSize;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector( onTap: onTap,
-      child: Container( width: width, margin: EdgeInsets.symmetric(horizontal: Dimensions.width10/2),
-        padding: EdgeInsets.symmetric(vertical: Dimensions.height10,horizontal:  Dimensions.width10/2),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),
-          color: kPrimary,
-          //border: Border.all(color: kLightGreen,width: 2)
-        ),
-        child: Center(child: Text(txt,style: TextStyle(color:klighterGreen,fontSize: txtSize),)),),
-    );
-  }
-}
 

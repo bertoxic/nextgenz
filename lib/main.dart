@@ -5,12 +5,19 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:untitled2/Screens/phone_login.dart';
 import 'package:untitled2/controller/TaskController.dart';
+import 'package:untitled2/controller/prescription_controller.dart';
+import 'package:untitled2/dependencies/dependencies.dart';
 import 'package:untitled2/onBording/splashScreen.dart';
-
-void main() {
+import 'package:untitled2/dependencies/dependencies.dart' as dep;
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  dep.init();
   runApp(const MyApp());
-  Get.put(TaskController());
-  Get.find<TaskController>();
+
+  // Get.put(TaskController());
+  // Get.find<TaskController>();
+  // Get.put(PrescriptionController());
+  // Get.find<PrescriptionController>();
 }
 
 class MyApp extends StatelessWidget {
